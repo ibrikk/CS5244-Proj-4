@@ -11,16 +11,21 @@ public class ApplicationContext {
     // TODO Add field and complete the getter for bookDao
 
     private CategoryDao categoryDao;
+    private BookDao bookDao;
 
     public static ApplicationContext INSTANCE = new ApplicationContext();
 
     private ApplicationContext() {
         categoryDao = new CategoryDaoJdbc();
+        bookDao = new BookDaoJdbc();
     }
 
     public CategoryDao getCategoryDao() {
         return categoryDao;
     }
 
-    public BookDao getBookDao() { return null; }
+    public BookDao getBookDao() {
+        return bookDao;
+    }
+
 }

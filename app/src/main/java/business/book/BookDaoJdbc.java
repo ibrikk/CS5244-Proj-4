@@ -51,9 +51,16 @@ public class BookDaoJdbc implements BookDao {
     @Override
     public List<Book> findByCategoryId(long categoryId) {
         List<Book> books = new ArrayList<>();
+
+        String query = "SELECT book_id, title, author, description, price, rating, is_public, is_featured, category_id "
+                +
+                "FROM book " +
+                "WHERE category_id = ?";
+
         try (Connection connection = JdbcUtils.getConnection();
-                PreparedStatement statement = connection.prepareStatement(FIND_BY_CATEGORY_ID_SQL)) {
+                PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setLong(1, categoryId);
+
             try (ResultSet resultSet = statement.executeQuery()) {
                 while (resultSet.next()) {
                     Book book = readBook(resultSet);
@@ -71,10 +78,16 @@ public class BookDaoJdbc implements BookDao {
     public List<Book> findRandomByCategoryId(long categoryId, int limit) {
         List<Book> books = new ArrayList<>();
 
+        String queryWithLimit = "SELECT book_id, title, author, description, price, rating, is_public, is_featured, category_id "
+                +
+                "FROM book " +
+                "WHERE category_id = ? " +
+                "ORDER BY RAND() " +
+                "LIMIT " + limit;
         try (Connection connection = JdbcUtils.getConnection();
-                PreparedStatement statement = connection.prepareStatement(FIND_RANDOM_BY_CATEGORY_ID_SQL)) {
+                PreparedStatement statement = connection.prepareStatement(queryWithLimit)) {
             statement.setLong(1, categoryId);
-            statement.setInt(2, limit);
+
             try (ResultSet resultSet = statement.executeQuery()) {
                 while (resultSet.next()) {
                     Book book = readBook(resultSet);
@@ -85,7 +98,6 @@ public class BookDaoJdbc implements BookDao {
             throw new BookstoreQueryDbException("Encountered a problem finding random books for category " + categoryId,
                     e);
         }
-
         return books;
     }
 

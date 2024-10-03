@@ -8,8 +8,6 @@ import business.category.CategoryDaoJdbc;
 
 public class ApplicationContext {
 
-    // TODO Add field and complete the getter for bookDao
-
     private CategoryDao categoryDao;
     private BookDao bookDao;
 

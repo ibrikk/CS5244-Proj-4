@@ -14,26 +14,25 @@ import business.BookstoreDbException.BookstoreQueryDbException;
 
 public class BookDaoJdbc implements BookDao {
 
-    private static final String FIND_BY_BOOK_ID_SQL =
-            "SELECT book_id, title, author, price, is_public, category_id " +
-                    "FROM book " +
-                    "WHERE book_id = ?";
+    private static final String FIND_BY_BOOK_ID_SQL = "SELECT book_id, title, author, price, is_public, category_id " +
+            "FROM book " +
+            "WHERE book_id = ?";
 
     private static final String FIND_BY_CATEGORY_ID_SQL = "";
     // TODO Implement this constant to be used in the findByCategoryId method
 
-    private static final String FIND_RANDOM_BY_CATEGORY_ID_SQL =
-            "SELECT book_id, title, author, price, is_public, category_id " +
-                    "FROM book " +
-                    "WHERE category_id = ? " +
-                    "ORDER BY RAND() " +
-                    "LIMIT ?";
+    private static final String FIND_RANDOM_BY_CATEGORY_ID_SQL = "SELECT book_id, title, author, price, is_public, category_id "
+            +
+            "FROM book " +
+            "WHERE category_id = ? " +
+            "ORDER BY RAND() " +
+            "LIMIT ?";
 
     @Override
     public Book findByBookId(long bookId) {
         Book book = null;
         try (Connection connection = JdbcUtils.getConnection();
-             PreparedStatement statement = connection.prepareStatement(FIND_BY_BOOK_ID_SQL)) {
+                PreparedStatement statement = connection.prepareStatement(FIND_BY_BOOK_ID_SQL)) {
             statement.setLong(1, bookId);
             try (ResultSet resultSet = statement.executeQuery()) {
                 if (resultSet.next()) {
@@ -64,7 +63,6 @@ public class BookDaoJdbc implements BookDao {
         return books;
     }
 
-
     private Book readBook(ResultSet resultSet) throws SQLException {
         // TODO add description, isFeatured, rating to Book results
         long bookId = resultSet.getLong("book_id");
@@ -73,6 +71,6 @@ public class BookDaoJdbc implements BookDao {
         int price = resultSet.getInt("price");
         boolean isPublic = resultSet.getBoolean("is_public");
         long categoryId = resultSet.getLong("category_id");
-        return new Book(bookId, title, author, price, isPublic, categoryId);
+        return new Book(bookId, title, author, author, price, price, isPublic, isPublic, categoryId);
     }
 }

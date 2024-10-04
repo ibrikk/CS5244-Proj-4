@@ -14,24 +14,18 @@ import business.BookstoreDbException.BookstoreQueryDbException;
 
 public class BookDaoJdbc implements BookDao {
 
-    private static final String FIND_BY_BOOK_ID_SQL = "SELECT book_id, title, author, description, price, rating, is_public, is_featured, category_id"
-            +
-            "FROM book " +
-            "WHERE book_id = ?";
+    private static final String FIND_BY_BOOK_ID_SQL = "SELECT book_id, title, author, description, price, rating, is_public, is_featured, category_id "
+            + "FROM book " + "WHERE book_id = ?";
 
     private static final String FIND_BY_CATEGORY_ID_SQL = "SELECT book_id, title, author, description, price, rating, is_public, is_featured, category_id "
+            + "FROM book " + "WHERE category_id = ?";
+
+    private static final String FIND_RANDOM_BY_CATEGORY_ID_SQL = "SELECT book_id, title, author, description, price, rating, is_public, is_featured, category_id "
             +
             "FROM book " +
-            "WHERE category_id = ?";
-
-    // private static final String FIND_RANDOM_BY_CATEGORY_ID_SQL = "SELECT book_id,
-    // title, author, description, price, rating, is_public, is_featured,
-    // category_id"
-    // +
-    // "FROM book " +
-    // "WHERE category_id = ? " +
-    // "ORDER BY RAND() " +
-    // "LIMIT ?";
+            "WHERE category_id = ? " +
+            "ORDER BY RAND() " +
+            "LIMIT ";
 
     @Override
     public Book findByBookId(long bookId) {
@@ -75,12 +69,7 @@ public class BookDaoJdbc implements BookDao {
     public List<Book> findRandomByCategoryId(long categoryId, int limit) {
         List<Book> books = new ArrayList<>();
 
-        String queryWithLimit = "SELECT book_id, title, author, description, price, rating, is_public, is_featured, category_id "
-                +
-                "FROM book " +
-                "WHERE category_id = ? " +
-                "ORDER BY RAND() " +
-                "LIMIT " + limit;
+        String queryWithLimit = FIND_RANDOM_BY_CATEGORY_ID_SQL + limit;
         try (Connection connection = JdbcUtils.getConnection();
                 PreparedStatement statement = connection.prepareStatement(queryWithLimit)) {
             statement.setLong(1, categoryId);

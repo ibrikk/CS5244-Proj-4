@@ -12,26 +12,23 @@ import java.util.List;
 
 public class CategoryDaoJdbc implements CategoryDao {
 
-    private static final String FIND_ALL_SQL =
-            "SELECT category_id, name " +
-                    "FROM category";
+    private static final String FIND_ALL_SQL = "SELECT category_id, name " +
+            "FROM category";
 
-    private static final String FIND_BY_CATEGORY_ID_SQL =
-            "SELECT category_id, name " +
-                    "FROM category " +
-                    "WHERE category_id = ?";
+    private static final String FIND_BY_CATEGORY_ID_SQL = "SELECT category_id, name " +
+            "FROM category " +
+            "WHERE category_id = ?";
 
-    private static final String FIND_BY_NAME_SQL =
-            "SELECT category_id, name " +
-                    "FROM category " +
-                    "WHERE name = ?";
+    private static final String FIND_BY_NAME_SQL = "SELECT category_id, name " +
+            "FROM category " +
+            "WHERE name = ?";
 
     @Override
     public List<Category> findAll() {
         List<Category> categories = new ArrayList<>();
         try (Connection connection = JdbcUtils.getConnection();
-             PreparedStatement statement = connection.prepareStatement(FIND_ALL_SQL);
-             ResultSet resultSet = statement.executeQuery()) {
+                PreparedStatement statement = connection.prepareStatement(FIND_ALL_SQL);
+                ResultSet resultSet = statement.executeQuery()) {
             while (resultSet.next()) {
                 Category category = readCategory(resultSet);
                 categories.add(category);
@@ -46,7 +43,7 @@ public class CategoryDaoJdbc implements CategoryDao {
     public Category findByCategoryId(long categoryId) {
         Category category = null;
         try (Connection connection = JdbcUtils.getConnection();
-             PreparedStatement statement = connection.prepareStatement(FIND_BY_CATEGORY_ID_SQL)) {
+                PreparedStatement statement = connection.prepareStatement(FIND_BY_CATEGORY_ID_SQL)) {
             statement.setLong(1, categoryId);
             try (ResultSet resultSet = statement.executeQuery()) {
                 if (resultSet.next()) {
@@ -62,9 +59,17 @@ public class CategoryDaoJdbc implements CategoryDao {
     @Override
     public Category findByName(String name) {
         Category category = null;
-
-        // TODO: Finish implementing this method
-
+        try (Connection connection = JdbcUtils.getConnection();
+                PreparedStatement statement = connection.prepareStatement(FIND_BY_NAME_SQL)) {
+            statement.setString(1, name);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    category = readCategory(resultSet);
+                }
+            }
+        } catch (SQLException e) {
+            throw new BookstoreQueryDbException("Encountered a problem finding category by name " + name, e);
+        }
         return category;
     }
 

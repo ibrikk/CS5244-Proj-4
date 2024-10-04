@@ -97,7 +97,6 @@ public class ApiResource {
         }
     }
 
-    // TODO Implement the following APIs
     @GET
     @Path("categories/name/{category-name}")
     @Produces(MediaType.APPLICATION_JSON)

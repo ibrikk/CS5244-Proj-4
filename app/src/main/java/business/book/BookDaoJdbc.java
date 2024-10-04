@@ -24,12 +24,14 @@ public class BookDaoJdbc implements BookDao {
             "FROM book " +
             "WHERE category_id = ?";
 
-    private static final String FIND_RANDOM_BY_CATEGORY_ID_SQL = "SELECT book_id, title, author, description, price, rating, is_public, is_featured, category_id"
-            +
-            "FROM book " +
-            "WHERE category_id = ? " +
-            "ORDER BY RAND() " +
-            "LIMIT ?";
+    // private static final String FIND_RANDOM_BY_CATEGORY_ID_SQL = "SELECT book_id,
+    // title, author, description, price, rating, is_public, is_featured,
+    // category_id"
+    // +
+    // "FROM book " +
+    // "WHERE category_id = ? " +
+    // "ORDER BY RAND() " +
+    // "LIMIT ?";
 
     @Override
     public Book findByBookId(long bookId) {
@@ -52,13 +54,8 @@ public class BookDaoJdbc implements BookDao {
     public List<Book> findByCategoryId(long categoryId) {
         List<Book> books = new ArrayList<>();
 
-        String query = "SELECT book_id, title, author, description, price, rating, is_public, is_featured, category_id "
-                +
-                "FROM book " +
-                "WHERE category_id = ?";
-
         try (Connection connection = JdbcUtils.getConnection();
-                PreparedStatement statement = connection.prepareStatement(query)) {
+                PreparedStatement statement = connection.prepareStatement(FIND_BY_CATEGORY_ID_SQL)) {
             statement.setLong(1, categoryId);
 
             try (ResultSet resultSet = statement.executeQuery()) {

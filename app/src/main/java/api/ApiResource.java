@@ -149,25 +149,4 @@ public class ApiResource {
         }
     }
 
-    // @GET
-    // @Path("categories/name/{category-name}/suggested-books")
-    // @Produces(MediaType.APPLICATION_JSON)
-    // public List<Book>
-    // suggestedBooksByCategoryNameWithLimit(@PathParam("category-name") String
-    // categoryName,
-    // @QueryParam("limit") int limit,
-    // @Context HttpServletRequest request) {
-    // try {
-    // Category category = categoryDao.findByName(categoryName);
-    // if (category == null) {
-    // throw new ApiException(String.format("No such category name: %s",
-    // categoryName));
-    // }
-    // return bookDao.findRandomByCategoryId(category.categoryId(), limit);
-    // } catch (Exception e) {
-    // throw new ApiException(String.format("Suggested books lookup by category-name
-    // %s failed", categoryName), e);
-    // }
-    // }
-
 }
